@@ -1,180 +1,109 @@
-g<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy Birthday Ejhay!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --primary: #ff6b6b;
-            --secondary: #feca57;
-            --bg: #f7f1e3;
+        :root { --primary: #ff6b6b; --secondary: #feca57; --bg: #f7f1e3; }
+        body { margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; background: var(--bg); font-family: 'Segoe UI', sans-serif; text-align: center; overflow-x: hidden; }
+        
+        .hero { padding: 40px 20px; z-index: 10; }
+        h1 { color: var(--primary); font-size: 3.2rem; margin: 0; text-shadow: 2px 2px #fff; }
+        
+        /* Cake Animation */
+        .cake-container { cursor: pointer; margin: 30px auto; position: relative; width: 150px; z-index: 10; }
+        .cake { width: 150px; height: 80px; background: #6d4c41; border-radius: 10px 10px 0 0; position: relative; }
+        .frosting { width: 150px; height: 30px; background: #f06292; border-radius: 10px 10px 20px 20px; position: absolute; top: 0; }
+        .candle { width: 10px; height: 35px; background: var(--secondary); position: absolute; top: -35px; left: 70px; border-radius: 2px; }
+        .flame { width: 15px; height: 20px; background: orange; position: absolute; top: -20px; left: -2.5px; border-radius: 50% 50% 20% 20%; animation: flicker 0.1s infinite alternate; }
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.1); } }
+        
+        /* Form Styling */
+        .form-container { 
+            background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 85%; max-width: 350px; margin-bottom: 40px; z-index: 20;
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: var(--bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px #fff;
-            z-index: 10;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: #444;
-            z-index: 10;
-        }
-
-        /* The Cake */
-        .cake-container {
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            margin-top: 50px;
-            z-index: 10;
-        }
-
-        .cake-container:hover {
-            transform: scale(1.05);
-        }
-
-        .cake {
-            width: 150px;
-            height: 100px;
-            background: #6d4c41;
-            border-radius: 10px 10px 0 0;
-            position: relative;
-            box-shadow: 0 10px #5d4037;
-        }
-
-        .frosting {
-            width: 150px;
-            height: 40px;
-            background: #f06292;
-            border-radius: 10px 10px 20px 20px;
-            position: absolute;
-            top: 0;
-        }
-
-        .candle {
-            width: 10px;
-            height: 40px;
-            background: var(--secondary);
-            position: absolute;
-            top: -40px;
-            left: 70px;
-            border-radius: 2px;
-        }
-
-        .flame {
-            width: 15px;
-            height: 20px;
-            background: orange;
-            position: absolute;
-            top: -20px;
-            left: -2.5px;
-            border-radius: 50% 50% 20% 20%;
-            animation: flicker 0.1s infinite alternate;
-        }
-
-        @keyframes flicker {
-            from { transform: scale(1); opacity: 0.8; }
-            to { transform: scale(1.1); opacity: 1; }
-        }
-
-        /* Balloons */
-        .balloon {
-            position: absolute;
-            bottom: -100px;
-            width: 50px;
-            height: 70px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: float 8s infinite ease-in;
-            opacity: 0.7;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); left: var(--x); }
-            100% { transform: translateY(-120vh) rotate(20deg); left: var(--x); }
-        }
+        textarea { width: 100%; padding: 15px; margin: 15px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; resize: none; }
+        textarea:focus { border-color: var(--primary); outline: none; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: 0.3s; }
+        button:hover { background: #ee5253; transform: scale(1.02); }
+        button:disabled { background: #ccc; cursor: not-allowed; }
 
         .hidden { display: none; }
+        .balloon { position: absolute; bottom: -100px; width: 45px; height: 65px; border-radius: 50%; opacity: 0.5; z-index: 1; animation: float 12s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-130vh); } }
     </style>
 </head>
 <body>
 
-    <div id="balloons-container"></div>
+    <div id="balloons"></div>
 
-    <h1>Happy Birthday EJHAY! 🎈</h1>
-    <p>WISH then Click the cake to make a wish and blow out the candle!</p>
-
-    <div class="cake-container" onclick="blowCandle()">
-        <div class="candle">
-            <div class="flame" id="flame"></div>
-        </div>
-        <div class="cake">
-            <div class="frosting"></div>
+    <div class="hero">
+        <h1>For Ejhay 🎂</h1>
+        <p>Blow the candle to start the party!</p>
+        
+        <div class="cake-container" onclick="blowCandle()">
+            <div class="candle"><div class="flame" id="flame"></div></div>
+            <div class="cake"><div class="frosting"></div></div>
         </div>
     </div>
 
+    <div class="form-container">
+        <h3>Leave a Message</h3>
+        <form id="msgForm">
+            <textarea id="message" rows="4" placeholder="Type your birthday wish here..." required></textarea>
+            <button type="submit" id="submitBtn">Send to Ejhay ✨</button>
+        </form>
+        <p id="status" style="margin-top: 15px; font-weight: bold; color: #2ecc71;"></p>
+    </div>
+
     <script>
-        // Create random balloons
-        const container = document.getElementById('balloons-container');
-        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#ff9ff3'];
+        // REPLACE THIS WITH YOUR WEB APP URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ6ZgCEgm6MtSpxip2ylxpgGDSA79IayqDat9mEHECVWSlgBG1ZHu17TsEkRbdPCU9tA/exec'; 
 
-        for (let i = 0; i < 15; i++) {
-            const balloon = document.createElement('div');
-            balloon.className = 'balloon';
-            balloon.style.setProperty('--x', Math.random() * 100 + 'vw');
-            balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            balloon.style.animationDelay = Math.random() * 5 + 's';
-            balloon.style.left = Math.random() * 100 + 'vw';
-            container.appendChild(balloon);
-        }
-
-        // Initial Confetti
-        window.onload = () => {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        };
-
-        // Interaction logic
         function blowCandle() {
             const flame = document.getElementById('flame');
-            if (!flame.classList.contains('hidden')) {
+            if(!flame.classList.contains('hidden')) {
                 flame.classList.add('hidden');
-                
-                // Big burst of confetti
-                confetti({
-                    particleCount: 200,
-                    velocity: 30,
-                    spread: 360,
-                    origin: { y: 0.5 }
-                });
-
-                alert("✨ Wish granted! Have an amazing day! ✨");
-            } else {
-                flame.classList.remove('hidden');
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
             }
+        }
+
+        document.getElementById('msgForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('status');
+            const msg = document.getElementById('message').value;
+            
+            btn.disabled = true;
+            btn.innerText = "Sending...";
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ message: msg })
+            }).then(() => {
+                status.innerText = "Sent! Ejhay will love it. 💖";
+                btn.innerText = "Message Delivered!";
+                document.getElementById('msgForm').reset();
+            }).catch(err => {
+                status.innerText = "Oops! Try again.";
+                btn.disabled = false;
+            });
+        });
+
+        // Balloon Generator
+        const colors = ['#ff6b6b','#feca57','#48dbfb','#1dd1a1','#ff9ff3'];
+        for(let i=0; i<20; i++) {
+            const b = document.createElement('div');
+            b.className = 'balloon';
+            b.style.left = Math.random() * 100 + 'vw';
+            b.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+            b.style.animationDelay = (Math.random() * 8) + 's';
+            document.getElementById('balloons').appendChild(b);
         }
     </script>
 </body>
