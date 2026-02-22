@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #feca57;
+            --bg: #f7f1e3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #fff;
+            z-index: 10;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #444;
+            z-index: 10;
+        }
+
+        /* The Cake */
+        .cake-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 50px;
+            z-index: 10;
+        }
+
+        .cake-container:hover {
+            transform: scale(1.05);
+        }
+
+        .cake {
+            width: 150px;
+            height: 100px;
+            background: #6d4c41;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            box-shadow: 0 10px #5d4037;
+        }
+
+        .frosting {
+            width: 150px;
+            height: 40px;
+            background: #f06292;
+            border-radius: 10px 10px 20px 20px;
+            position: absolute;
+            top: 0;
+        }
+
+        .candle {
+            width: 10px;
+            height: 40px;
+            background: var(--secondary);
+            position: absolute;
+            top: -40px;
+            left: 70px;
+            border-radius: 2px;
+        }
+
+        .flame {
+            width: 15px;
+            height: 20px;
+            background: orange;
+            position: absolute;
+            top: -20px;
+            left: -2.5px;
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Balloons */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            width: 50px;
+            height: 70px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); left: var(--x); }
+            100% { transform: translateY(-120vh) rotate(20deg); left: var(--x); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="balloons-container"></div>
+
+    <h1>Happy Birthday! 🎈</h1>
+    <p>Click the cake to make a wish and blow out the candle!</p>
+
+    <div class="cake-container" onclick="blowCandle()">
+        <div class="candle">
+            <div class="flame" id="flame"></div>
+        </div>
+        <div class="cake">
+            <div class="frosting"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create random balloons
+        const container = document.getElementById('balloons-container');
+        const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#ff9ff3'];
+
+        for (let i = 0; i < 15; i++) {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.setProperty('--x', Math.random() * 100 + 'vw');
+            balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.animationDelay = Math.random() * 5 + 's';
+            balloon.style.left = Math.random() * 100 + 'vw';
+            container.appendChild(balloon);
+        }
+
+        // Initial Confetti
+        window.onload = () => {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        };
+
+        // Interaction logic
+        function blowCandle() {
+            const flame = document.getElementById('flame');
+            if (!flame.classList.contains('hidden')) {
+                flame.classList.add('hidden');
+                
+                // Big burst of confetti
+                confetti({
+                    particleCount: 200,
+                    velocity: 30,
+                    spread: 360,
+                    origin: { y: 0.5 }
+                });
+
+                alert("✨ Wish granted! Have an amazing day! ✨");
+            } else {
+                flame.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
